@@ -2136,8 +2136,9 @@ a.contact__value:hover {
   opacity: 0;
   pointer-events: none;
 }
-.carousel.is-immersive {
-  cursor: none;
+.carousel.is-immersive,
+.carousel.is-immersive canvas {
+  cursor: none !important;
 }
 .carousel__hint {
   color: var(--faint);

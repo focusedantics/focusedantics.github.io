@@ -24,6 +24,10 @@ const OUT_DIR = path.join(ROOT, 'public/photos')
 const MANIFEST = path.join(ROOT, 'src/content/photos.generated.json')
 
 const WIDTHS = [640, 960, 1280, 1600, 1920, 2560]
+// One extra, larger WebP for the full-screen viewer (4K-wide screens). Only
+// made when the master is wider than the largest regular derivative, and only
+// downloaded when someone opens that photo full screen.
+const FULL_WIDTH = 3840
 const INPUT_EXT = /\.(jpe?g|png|tiff?|webp|heic|heif|avif)$/i
 
 // Quality-first settings, tuned by eye at 1:1 against the masters (grain,
@@ -92,6 +96,25 @@ async function readExif(file) {
   }
 }
 
+/**
+ * Ensure the full-screen WebP exists; returns its width, or null if the
+ * largest regular derivative already covers it. The long edge is capped at
+ * FULL_WIDTH so portraits stay within phones' 4096px texture limit.
+ */
+async function ensureFull(base, slug, dir, width, height) {
+  const w = Math.min(width, FULL_WIDTH, Math.round(FULL_WIDTH * (width / height)))
+  if (w <= Math.min(width, WIDTHS.at(-1))) return null
+  const out = path.join(dir, `${slug}-full.webp`)
+  if (!FORCE && existsSync(out)) return w
+  await base
+    .clone()
+    .resize({ width: w, withoutEnlargement: true, kernel: 'lanczos3' })
+    .withIccProfile('srgb')
+    .webp({ quality: 88, effort: 4, smartSubsample: true })
+    .toFile(out)
+  return w
+}
+
 async function processOne(file, previous) {
   const slug = slugify(file)
   const srcStat = statSync(file)
@@ -111,7 +134,7 @@ async function processOne(file, previous) {
     previous?.sourceBytes === srcStat.size &&
     widths.every((w) => Object.keys(ENCODERS).every((ext) => existsSync(path.join(dir, `${slug}-${w}.${ext}`))))
 
-  if (upToDate) return { ...previous, exif: await readExif(file), _skipped: true }
+  if (upToDate) return { ...previous, full: await ensureFull(base, slug, dir, width, height), exif: await readExif(file), _skipped: true }
 
   await fs.rm(dir, { recursive: true, force: true })
   await fs.mkdir(dir, { recursive: true })
@@ -141,6 +164,7 @@ async function processOne(file, previous) {
     placeholder: `data:image/webp;base64,${lqip.toString('base64')}`,
     color: `rgb(${dominant.r} ${dominant.g} ${dominant.b})`,
     exif: await readExif(file),
+    full: await ensureFull(base, slug, dir, width, height),
     _outputs: outputs,
   }
 }
