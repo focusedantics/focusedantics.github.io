@@ -11,10 +11,13 @@ import { isSmallScreen } from '../../lib/device.js'
  * This file is only loaded on demand, so three.js stays out of page loads.
  */
 
+const FIT_WIDTH = 0.86 // a card never gets wider than 86% of the screen
+
 /** Smallest derivative that stays sharp at the card's focused size. */
 function textureSrc(photo, cardH) {
   const dpr = Math.min(window.devicePixelRatio || 1, 2)
-  const need = photo.aspect * cardH * 1.2 * dpr
+  const h = Math.min(cardH, (window.innerWidth * FIT_WIDTH) / photo.aspect)
+  const need = photo.aspect * h * 1.2 * dpr
   const w = photo.widths.find((x) => x >= need) ?? photo.widths.at(-1)
   return `/photos/${photo.slug}/${photo.slug}-${w}.webp`
 }
@@ -38,15 +41,20 @@ export default function CarouselViewer({ state, onClose }) {
   useEffect(() => {
     const mount = mountRef.current
     const vh = window.innerHeight
-    const cardH = Math.round(Math.min(small ? vh * 0.6 : vh * 0.7, 820))
+    // One look on every screen (the phone tuning): cards at 60% of the
+    // viewport height, gentle colour fringing, and wide photos shrunk to fit
+    // the screen width so a landscape frame is always seen whole.
+    const cardH = Math.round(Math.min(vh * 0.6, 760))
     const params = makeParams({
       background: '#08080a',
-      sizeMode: 'image', // every card keeps its photograph's own aspect ratio
+      sizeMode: 'fit',
+      fitWidth: FIT_WIDTH,
       cardHeight: cardH,
-      gap: small ? 10 : 18,
+      gap: small ? 10 : 16,
       maxDpr: small ? 1.5 : 2,
-      focusScale: small ? 1.08 : 1.18,
-      lens: { ringColor: '#e3a857', dispersion: small ? 7 : 10, samples: small ? 8 : 16 },
+      focusScale: small ? 1.08 : 1.12,
+      // aspect 0.46 ≈ a phone held upright: wide screens get the phone's lens
+      lens: { ringColor: '#e3a857', dispersion: 7, samples: 8, aspect: 0.46 },
       motion: { sensitivity: 5, glide: 5, snap: true },
       entry: { enabled: true, enterFrom: 'bottom', transition: { duration: 0.6, ease: [0.2, 0.7, 0.1, 1] } },
     })
