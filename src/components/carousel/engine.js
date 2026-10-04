@@ -1107,7 +1107,7 @@ export function createEngine(mount, getParams, hooks = {}) {
   }
   function updateCursor() {
     if (entryActive || entrySettled) return setCursor('')
-    if (focusState.active) return setCursor(hoverFocused ? '' : 'zoom-out')
+    if (focusState.active) return setCursor('zoom-out')
     if (dragging) return setCursor('grabbing')
     if (!hoverPanel) return setCursor('')
     if (pp.drag) return setCursor('grab')
@@ -1237,9 +1237,9 @@ export function createEngine(mount, getParams, hooks = {}) {
       suppressClick = false
       return
     }
+    // In full-screen focus, a click (or tap) anywhere returns to the carousel.
     if (focusState.active) {
-      const on = panelAtPointer(e.clientX - bounds.left, e.clientY - bounds.top)
-      if (!on || on.poolIdx !== focusState.poolIdx) closeFocus()
+      closeFocus()
       return
     }
     if (inputLocked()) return

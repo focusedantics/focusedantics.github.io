@@ -169,7 +169,7 @@ export default function CarouselViewer({ state, onClose }) {
         <div className="lightbox__caption">
           {meta && <span className="meta">{meta}</span>}
           {exposure && <span className="meta meta--dim">{exposure}</span>}
-          <span className="meta meta--dim carousel__hint">{focused ? 'Click outside or Esc to release' : small ? 'Swipe · tap the centre frame' : 'Drag or scroll · click the centre frame'}</span>
+          <span className="meta meta--dim carousel__hint">{focused ? (small ? 'Tap to return' : 'Click or Esc to return') : small ? 'Swipe · tap the centre frame' : 'Drag or scroll · click the centre frame'}</span>
         </div>
         <div className="lightbox__controls">
           <button type="button" className="icon-btn" onClick={() => engineRef.current?.go(-1)} disabled={items.length < 2 || focused} aria-label="Previous photo">
