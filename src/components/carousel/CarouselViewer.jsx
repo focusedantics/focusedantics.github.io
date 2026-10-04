@@ -16,8 +16,8 @@ const FIT_WIDTH = 0.86 // a card never gets wider than 86% of the screen
 /** Smallest derivative that stays sharp at the card's focused size. */
 function textureSrc(photo, cardH) {
   const dpr = Math.min(window.devicePixelRatio || 1, 2)
-  const h = Math.min(cardH, (window.innerWidth * FIT_WIDTH) / photo.aspect)
-  const need = photo.aspect * h * 1.2 * dpr
+  // sized for the focused view, where the photo fills the screen
+  const need = Math.min(window.innerWidth, window.innerHeight * photo.aspect) * dpr
   const w = photo.widths.find((x) => x >= need) ?? photo.widths.at(-1)
   return `/photos/${photo.slug}/${photo.slug}-${w}.webp`
 }
@@ -30,6 +30,31 @@ export default function CarouselViewer({ state, onClose }) {
   const [index, setIndex] = useState(startIndex)
   const [focused, setFocused] = useState(false)
   const [closing, setClosing] = useState(false)
+  const [chrome, setChrome] = useState(true) // controls visible
+
+  // While a photo fills the screen, the controls step aside; any movement,
+  // tap or key brings them back for a couple of seconds.
+  useEffect(() => {
+    if (!focused) {
+      setChrome(true)
+      return
+    }
+    let t = setTimeout(() => setChrome(false), 1200)
+    const wake = () => {
+      setChrome(true)
+      clearTimeout(t)
+      t = setTimeout(() => setChrome(false), 2200)
+    }
+    window.addEventListener('pointermove', wake)
+    window.addEventListener('pointerdown', wake)
+    window.addEventListener('keydown', wake)
+    return () => {
+      clearTimeout(t)
+      window.removeEventListener('pointermove', wake)
+      window.removeEventListener('pointerdown', wake)
+      window.removeEventListener('keydown', wake)
+    }
+  }, [focused])
   const small = isSmallScreen()
 
   const close = () => {
@@ -52,7 +77,7 @@ export default function CarouselViewer({ state, onClose }) {
       cardHeight: cardH,
       gap: small ? 10 : 16,
       maxDpr: small ? 1.5 : 2,
-      focusScale: small ? 1.08 : 1.12,
+      focusFill: 1, // a focused photo fills the whole screen
       // aspect 0.46 ≈ a phone held upright: wide screens get the phone's lens
       lens: { ringColor: '#e3a857', dispersion: 7, samples: 8, aspect: 0.46 },
       motion: { sensitivity: 5, glide: 5, snap: true },
@@ -122,7 +147,7 @@ export default function CarouselViewer({ state, onClose }) {
   const meta = [label, photo?.exif?.year].filter(Boolean).join(' · ')
 
   return (
-    <div ref={rootRef} className="carousel" tabIndex={-1} role="dialog" aria-modal="true" aria-label={`${label || 'Photo'} viewer`}>
+    <div ref={rootRef} className={`carousel ${chrome ? '' : 'is-immersive'}`} tabIndex={-1} role="dialog" aria-modal="true" aria-label={`${label || 'Photo'} viewer`}>
       <div ref={mountRef} className="carousel__stage" />
 
       <p className="sr-only" aria-live="polite">

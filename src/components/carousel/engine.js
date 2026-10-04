@@ -402,6 +402,7 @@ export function makeParams(p) {
     fitWidth: clamp(p.fitWidth ?? 0.86, 0.3, 1),
     gap: clamp(p.gap ?? 12, 0, 200),
     maxDpr: clamp(p.maxDpr ?? 2, 0.5, 3),
+    focusFill: p.focusFill ? clamp(p.focusFill, 0.5, 1) : 0,
     shrinkMax: 0.25,
     shrinkSpeed: 60,
     shrinkAttack: 0.25,
@@ -1287,7 +1288,9 @@ export function createEngine(mount, getParams, hooks = {}) {
     if (focusTl) focusTl.kill()
     const tl = new Timeline()
     tl.to(focusState, 'lensFx', 0, F.lensFade, OUT3, 0)
-    tl.to(focusZoom, 'v', F.centerScale, F.focusDuration, F.ease, 0)
+    // focusFill: grow the photo until it fills the screen (never cropped)
+    const scale = pp.focusFill ? Math.min((W * pp.focusFill) / panel.wPx, (H * pp.focusFill) / panel.h) : F.centerScale
+    tl.to(focusZoom, 'v', scale, F.focusDuration, F.ease, 0)
     ranked.forEach((o) => {
       tl.to(drop, o.idx, 1, F.cardDuration, F.ease, o.rank * F.stagger)
     })
