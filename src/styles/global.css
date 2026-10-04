@@ -2085,6 +2085,63 @@ a.contact__value:hover {
   }
 }
 
+/* ---------- Liquid Glass Carousel viewer ---------- */
+
+.carousel {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #08080a;
+  animation: carousel-in 360ms ease-out both;
+}
+@keyframes carousel-in {
+  from {
+    opacity: 0;
+  }
+}
+.carousel:focus {
+  outline: none;
+}
+.carousel__stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  touch-action: none;
+}
+.carousel__close-wrap {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  right: 14px;
+  padding: 4px;
+  z-index: 2;
+}
+.carousel__bar {
+  position: absolute;
+  left: 50%;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 6px 6px 6px 22px;
+  max-width: calc(100% - 24px);
+}
+.carousel__hint {
+  color: var(--faint);
+}
+@media (max-width: 760px) {
+  .carousel__bar {
+    left: 12px;
+    right: 12px;
+    transform: none;
+    justify-content: space-between;
+  }
+  .carousel__bar .lightbox__caption .meta--dim:not(.carousel__hint) {
+    display: none;
+  }
+}
+
 /* ---------- Footer ---------- */
 
 .footer {

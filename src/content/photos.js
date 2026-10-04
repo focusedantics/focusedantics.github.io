@@ -30,6 +30,7 @@ export const photoInfo = {
   dsc02356: { alt: 'Two people silhouetted in an embrace against a sunset sky over open water', focus: '48% 50%' },
   dsc02401: { alt: 'Four friends on waterfront rocks at sunset, two of them carried in the others’ arms', focus: '45% 55%' },
   dsc03214: { alt: 'A marching band member in a VT uniform raises a gloved fist against a bright blue sky', focus: '55% 40%' },
+  'exhibition-cover': { alt: 'A band member in a white VT uniform and HOKIES sash, seen from behind at dusk, a point of sunlight caught in one gloved hand', focus: '55% 35%' },
   dsc04402: { alt: 'A marching band member in a white VT uniform stands in a shaft of light, with a long-exposure blur of motion trailing beside them', focus: '62% 38%', tone: 'dark' },
   dsc03645: { alt: 'Trumpets raised under stadium lights by players in maroon uniforms', focus: '55% 45%' },
   'img-9226': { alt: 'Trumpet players in plumed VT shakos perform on the field in front of a packed crowd', focus: '40% 40%' },
@@ -77,7 +78,7 @@ export const collections = [
     id: 'game-day',
     title: 'Game Day',
     meta: 'Virginia Tech',
-    photos: ['dsc04324', 'dsc03214', 'dsc03314', 'dsc04402', 'img-9229', 'dsc04265', 'img-9226', 'dsc03645', 'dsc03306'],
+    photos: ['dsc04324', 'dsc03214', 'exhibition-cover', 'dsc03314', 'dsc04402', 'img-9229', 'dsc04265', 'img-9226', 'dsc03645', 'dsc03306'],
   },
   {
     id: 'portraits',
