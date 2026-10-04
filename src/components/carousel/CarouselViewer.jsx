@@ -11,13 +11,20 @@ import { isSmallScreen } from '../../lib/device.js'
  * This file is only loaded on demand, so three.js stays out of page loads.
  */
 
+/** Highest-resolution file for the full-screen view (the 4K WebP when one exists). */
+function fullSrc(photo) {
+  return photo.full ? `/photos/${photo.slug}/${photo.slug}-full.webp` : `/photos/${photo.slug}/${photo.slug}-${photo.widths.at(-1)}.webp`
+}
+
 const FIT_WIDTH = 0.86 // a card never gets wider than 86% of the screen
 
 /** Smallest derivative that stays sharp at the card's focused size. */
 function textureSrc(photo, cardH) {
   const dpr = Math.min(window.devicePixelRatio || 1, 2)
-  // sized for the focused view, where the photo fills the screen
-  const need = Math.min(window.innerWidth, window.innerHeight * photo.aspect) * dpr
+  // sized for the card (with headroom for the zoom into focus); the full
+  // file is swapped in once the photo fills the screen
+  const h = Math.min(cardH, (window.innerWidth * FIT_WIDTH) / photo.aspect)
+  const need = photo.aspect * h * 1.5 * dpr
   const w = photo.widths.find((x) => x >= need) ?? photo.widths.at(-1)
   return `/photos/${photo.slug}/${photo.slug}-${w}.webp`
 }
@@ -76,7 +83,8 @@ export default function CarouselViewer({ state, onClose }) {
       fitWidth: FIT_WIDTH,
       cardHeight: cardH,
       gap: small ? 10 : 16,
-      maxDpr: small ? 1.5 : 2,
+      maxDpr: small ? 1.5 : 2, // while browsing (the lens pass is costly)
+      focusDpr: 3, // full screen: the screen's real sharpness
       focusFill: 1, // a focused photo fills the whole screen
       // aspect 0.46 ≈ a phone held upright: wide screens get the phone's lens
       lens: { ringColor: '#e3a857', dispersion: 7, samples: 8, aspect: 0.46 },
@@ -95,7 +103,7 @@ export default function CarouselViewer({ state, onClose }) {
     }
     engineRef.current = engine
     engine.setItems(
-      items.map((p) => ({ src: textureSrc(p, cardH), aspect: p.aspect })),
+      items.map((p) => ({ src: textureSrc(p, cardH), aspect: p.aspect, full: fullSrc(p) })),
       startIndex,
     )
     return () => {

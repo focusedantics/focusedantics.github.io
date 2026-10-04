@@ -14,7 +14,8 @@
     ],
     "placeholder": "data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAAAwBACdASoYAA8APu1iqU2ppaOiMAgBMB2JZwC+SCKsJPRJZPsmJBG0msAA/tj1FQ7MZ1RclhrPbTRwUiEELllL5r2z9GgQRTtCexj1be8W8JqjprXUNoKZiEY7G2tyCJH86S7ztGprotPTBvUxpKcTm8WBoGeDvQVdIaP0eHsx0mgA",
     "color": "rgb(56 56 56)",
-    "exif": null
+    "exif": null,
+    "full": null
   },
   "2026-07-22-20-08-56": {
     "slug": "2026-07-22-20-08-56",
@@ -40,7 +41,8 @@
       "shutter": null,
       "iso": null,
       "year": 2026
-    }
+    },
+    "full": null
   },
   "2026-07-22-20-09-57": {
     "slug": "2026-07-22-20-09-57",
@@ -66,7 +68,8 @@
       "shutter": null,
       "iso": null,
       "year": 2026
-    }
+    },
+    "full": null
   },
   "2026-07-22-20-26-29": {
     "slug": "2026-07-22-20-26-29",
@@ -92,7 +95,8 @@
       "shutter": null,
       "iso": null,
       "year": 2026
-    }
+    },
+    "full": null
   },
   "2026-07-22-20-34-55": {
     "slug": "2026-07-22-20-34-55",
@@ -118,7 +122,8 @@
       "shutter": null,
       "iso": null,
       "year": 2026
-    }
+    },
+    "full": null
   },
   "2026-07-22-20-44-13": {
     "slug": "2026-07-22-20-44-13",
@@ -144,7 +149,8 @@
       "shutter": null,
       "iso": null,
       "year": 2026
-    }
+    },
+    "full": null
   },
   "2026-07-22-20-51-30": {
     "slug": "2026-07-22-20-51-30",
@@ -170,7 +176,8 @@
       "shutter": null,
       "iso": null,
       "year": 2026
-    }
+    },
+    "full": null
   },
   "79a1143": {
     "slug": "79a1143",
@@ -196,7 +203,8 @@
       "shutter": "1/2500",
       "iso": "ISO 125",
       "year": 2025
-    }
+    },
+    "full": 3840
   },
   "9b02ec2f-da32-4bcb-93b3-4ef716425f62": {
     "slug": "9b02ec2f-da32-4bcb-93b3-4ef716425f62",
@@ -222,7 +230,8 @@
       "shutter": null,
       "iso": null,
       "year": 2025
-    }
+    },
+    "full": null
   },
   "9b02ec2f-da32-4bcb-93b3-4ef716425f62-2": {
     "slug": "9b02ec2f-da32-4bcb-93b3-4ef716425f62-2",
@@ -248,7 +257,8 @@
       "shutter": null,
       "iso": null,
       "year": 2025
-    }
+    },
+    "full": null
   },
   "dsc00314": {
     "slug": "dsc00314",
@@ -272,7 +282,8 @@
       "shutter": "1/15",
       "iso": "ISO 12800",
       "year": 2025
-    }
+    },
+    "full": null
   },
   "dsc01201": {
     "slug": "dsc01201",
@@ -298,7 +309,8 @@
       "shutter": "1/5000",
       "iso": "ISO 6400",
       "year": 2026
-    }
+    },
+    "full": 3840
   },
   "dsc01355": {
     "slug": "dsc01355",
@@ -324,7 +336,8 @@
       "shutter": "1/250",
       "iso": "ISO 6400",
       "year": 2026
-    }
+    },
+    "full": null
   },
   "dsc01393": {
     "slug": "dsc01393",
@@ -350,7 +363,8 @@
       "shutter": "1/640",
       "iso": "ISO 6400",
       "year": 2026
-    }
+    },
+    "full": null
   },
   "dsc01656": {
     "slug": "dsc01656",
@@ -376,7 +390,8 @@
       "shutter": "1/400",
       "iso": "ISO 5000",
       "year": 2026
-    }
+    },
+    "full": 2880
   },
   "dsc02356": {
     "slug": "dsc02356",
@@ -402,7 +417,8 @@
       "shutter": "1/400",
       "iso": "ISO 50",
       "year": 2026
-    }
+    },
+    "full": 3840
   },
   "dsc02401": {
     "slug": "dsc02401",
@@ -428,7 +444,8 @@
       "shutter": "1/640",
       "iso": "ISO 100",
       "year": 2026
-    }
+    },
+    "full": 3840
   },
   "dsc03214": {
     "slug": "dsc03214",
@@ -454,7 +471,8 @@
       "shutter": "1/1000",
       "iso": "ISO 125",
       "year": 2026
-    }
+    },
+    "full": 3840
   },
   "dsc03306": {
     "slug": "dsc03306",
@@ -480,7 +498,8 @@
       "shutter": "1/250",
       "iso": "ISO 100",
       "year": 2026
-    }
+    },
+    "full": 3840
   },
   "dsc03314": {
     "slug": "dsc03314",
@@ -506,7 +525,8 @@
       "shutter": "1/250",
       "iso": "ISO 100",
       "year": 2026
-    }
+    },
+    "full": 3840
   },
   "dsc03645": {
     "slug": "dsc03645",
@@ -532,7 +552,8 @@
       "shutter": "1/500",
       "iso": "ISO 400",
       "year": 2026
-    }
+    },
+    "full": 3840
   },
   "dsc03793": {
     "slug": "dsc03793",
@@ -558,7 +579,8 @@
       "shutter": "1/125",
       "iso": "ISO 25600",
       "year": 2026
-    }
+    },
+    "full": 3840
   },
   "dsc04265": {
     "slug": "dsc04265",
@@ -583,7 +605,8 @@
       "shutter": "1/250",
       "iso": "ISO 320",
       "year": 2026
-    }
+    },
+    "full": null
   },
   "dsc04324": {
     "slug": "dsc04324",
@@ -609,7 +632,8 @@
       "shutter": "1/250",
       "iso": "ISO 320",
       "year": 2026
-    }
+    },
+    "full": 3840
   },
   "dsc04402": {
     "slug": "dsc04402",
@@ -635,7 +659,8 @@
       "shutter": "1/3",
       "iso": "ISO 80",
       "year": 2026
-    }
+    },
+    "full": null
   },
   "exhibition-cover": {
     "slug": "exhibition-cover",
@@ -651,7 +676,8 @@
     ],
     "placeholder": "data:image/webp;base64,UklGRrQAAABXRUJQVlA4IKgAAABQBACdASoQABgAPu1iqU2ppaQiMAgBMB2JbACdMoACPcpp5id/4KKQRudgAN2Zz7qQrHnwR+Vs4/BYem9KmmwqqV+27NCMEMh7HF0yuGzHPj98m3A8TBz4JqUNwKZZp1VxyxaveKckvhXiC03q+lu55ip71fe9Jy8XFdqaKVmUzweco/M93wB1WRHsq/DECwgrZQQ+OM0jY+g8FyK/Al4xtn8QiGh+6AA=",
     "color": "rgb(24 8 8)",
-    "exif": null
+    "exif": null,
+    "full": null
   },
   "img-1370": {
     "slug": "img-1370",
@@ -677,7 +703,8 @@
       "shutter": "1/30",
       "iso": "ISO 800",
       "year": 2025
-    }
+    },
+    "full": null
   },
   "img-1755": {
     "slug": "img-1755",
@@ -703,7 +730,8 @@
       "shutter": "1/6211",
       "iso": "ISO 100",
       "year": 2025
-    }
+    },
+    "full": 2880
   },
   "img-3389": {
     "slug": "img-3389",
@@ -729,7 +757,8 @@
       "shutter": "1/29",
       "iso": "ISO 2000",
       "year": 2024
-    }
+    },
+    "full": 2880
   },
   "img-3394": {
     "slug": "img-3394",
@@ -755,7 +784,8 @@
       "shutter": "1/1304",
       "iso": "ISO 80",
       "year": 2024
-    }
+    },
+    "full": 3840
   },
   "img-5488": {
     "slug": "img-5488",
@@ -781,7 +811,8 @@
       "shutter": "1/1395",
       "iso": "ISO 80",
       "year": 2025
-    }
+    },
+    "full": 2880
   },
   "img-7952": {
     "slug": "img-7952",
@@ -807,7 +838,8 @@
       "shutter": "1/17",
       "iso": "ISO 640",
       "year": 2025
-    }
+    },
+    "full": null
   },
   "img-9226": {
     "slug": "img-9226",
@@ -833,7 +865,8 @@
       "shutter": "1/470",
       "iso": "ISO 32",
       "year": 2026
-    }
+    },
+    "full": 3077
   },
   "img-9229": {
     "slug": "img-9229",
@@ -858,7 +891,8 @@
       "shutter": "1/370",
       "iso": "ISO 32",
       "year": 2026
-    }
+    },
+    "full": null
   },
   "img-9313": {
     "slug": "img-9313",
@@ -874,7 +908,8 @@
     ],
     "placeholder": "data:image/webp;base64,UklGRpYAAABXRUJQVlA4IIoAAADwAwCdASoQABgAPu1iqU2ppaOiMAgBMB2JbAC06BTmzRzmo43pbacAAP7kHCJueLwX74wyNAF6sLl43jCFrCVods4k2JBEUOWnvAuiG1QLi8u6HzM/9jbd09Z7eA/UzFF9GgGmHDFoJVp59dhV4k4fb07Fc66X7n2246hOdFnAzEJtSxMGOdABIAA=",
     "color": "rgb(8 8 8)",
-    "exif": null
+    "exif": null,
+    "full": null
   },
   "snow-day-cover": {
     "slug": "snow-day-cover",
@@ -889,6 +924,7 @@
     ],
     "placeholder": "data:image/webp;base64,UklGRsIAAABXRUJQVlA4ILYAAACQBACdASoYABIAPu1ur1KppiQiqAgBMB2JYwDHMA3LX24wJoJS+dYZC9M9ytAA/hbcSR+mr+u2OZm19zOYdDUb8d0GAKC0JGyBndqGavTevkB/1wx33OtSu9VX2r7U4Fi7gSsg6KJzwWpyL17IFoq8Xkc6mPEmi2QjfoZyUo1ZcfV4Kjbimy1XA2JJyis5kzoVi4kTzZkcIfaZtV+ifDch1uXzhHFPnCNFKgzBFIymAUdSJQAAAA==",
     "color": "rgb(8 8 8)",
-    "exif": null
+    "exif": null,
+    "full": null
   }
 }

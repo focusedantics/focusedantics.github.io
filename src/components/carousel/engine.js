@@ -403,6 +403,7 @@ export function makeParams(p) {
     gap: clamp(p.gap ?? 12, 0, 200),
     maxDpr: clamp(p.maxDpr ?? 2, 0.5, 3),
     focusFill: p.focusFill ? clamp(p.focusFill, 0.5, 1) : 0,
+    focusDpr: clamp(p.focusDpr ?? p.maxDpr ?? 2, 0.5, 3),
     shrinkMax: 0.25,
     shrinkSpeed: 60,
     shrinkAttack: 0.25,
@@ -834,7 +835,7 @@ export function createEngine(mount, getParams, hooks = {}) {
     bootTimer = awaiting > 0 ? setTimeout(boot, 6000) : null
 
     sources = list.map((item, i) => {
-      const s = { tex: null, aspect: item.aspect || 1, locked: item.aspect != null, ph: false }
+      const s = { tex: null, aspect: item.aspect || 1, locked: item.aspect != null, ph: false, fullSrc: item.full || null }
       if (!item.src) {
         s.ph = true
         s.tex = placeholderTexture(i, s.aspect, pp.cardColor)
@@ -1257,6 +1258,57 @@ export function createEngine(mount, getParams, hooks = {}) {
     updateCursor()
   }
 
+  // ---- Full resolution while a photo fills the screen --------------------
+  // Swap in the large file and render at the screen's real pixel density;
+  // both are reverted (and the big texture freed) when focus is released.
+  let fullTex = null
+  let fullFor = -1
+  let fullGen = 0
+  const baseDpr = renderer.getPixelRatio()
+  function setDpr(ratio) {
+    if (Math.abs(renderer.getPixelRatio() - ratio) < 0.01) return
+    renderer.setPixelRatio(ratio)
+    renderer.setSize(W, H)
+  }
+  function upgradeFocus(panel) {
+    setDpr(Math.min(window.devicePixelRatio || 1, pp.focusDpr))
+    const src = sources[panel.srcIndex]
+    if (!src?.fullSrc) return
+    const gen = ++fullGen
+    loader.load(src.fullSrc, (tex) => {
+      if (disposed || gen !== fullGen || !focusState.active || focusState.poolIdx !== panel.poolIdx) {
+        tex.dispose()
+        return
+      }
+      tex.minFilter = THREE.LinearFilter // shown ~1:1, no mipmaps needed
+      tex.magFilter = THREE.LinearFilter
+      tex.generateMipmaps = false
+      tex.colorSpace = THREE.NoColorSpace
+      fullTex = tex
+      fullFor = panel.poolIdx
+      const p = pool[panel.poolIdx]
+      if (p) {
+        p.mat.map = tex
+        p.mat.needsUpdate = true
+      }
+    })
+  }
+  function downgradeFocus() {
+    fullGen++
+    if (fullTex) {
+      const p = pool[fullFor]
+      const src = p && sources[p.srcIndex]
+      if (p && src?.tex) {
+        p.mat.map = src.tex
+        p.mat.needsUpdate = true
+      }
+      fullTex.dispose()
+      fullTex = null
+      fullFor = -1
+    }
+    setDpr(baseDpr)
+  }
+
   function openFocus() {
     if (focusState.active || !centeredPanel) return
     const F = pp.focus
@@ -1295,6 +1347,7 @@ export function createEngine(mount, getParams, hooks = {}) {
       tl.to(drop, o.idx, 1, F.cardDuration, F.ease, o.rank * F.stagger)
     })
     focusTl = tl
+    upgradeFocus(panel)
     hooks.onFocus?.(true)
     updateCursor()
   }
@@ -1302,6 +1355,7 @@ export function createEngine(mount, getParams, hooks = {}) {
   function closeFocus() {
     if (!focusState.active || closing) return
     closing = true
+    downgradeFocus()
     const F = pp.focus
     if (focusTl) focusTl.kill()
 
@@ -1563,6 +1617,7 @@ export function createEngine(mount, getParams, hooks = {}) {
     window.removeEventListener('resize', readBounds)
     if (focusTl) focusTl.kill()
     if (entryTl) entryTl.kill()
+    if (fullTex) fullTex.dispose()
     disposeContent()
     rt.dispose()
     lensQuad.geometry.dispose()
