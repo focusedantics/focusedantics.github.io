@@ -398,7 +398,8 @@ export function makeParams(p) {
     itemOffsets: (p.itemOffsets ?? []).slice(),
     panelH: clamp(p.cardHeight ?? p.panelHeight ?? 450, 60, 1200),
     cardW: clamp(p.cardWidth ?? 340, 40, 1600),
-    sizeMode: SIZE_MODES[p.sizeMode ?? 'same'] ? p.sizeMode ?? 'same' : 'same',
+    sizeMode: p.sizeMode === 'fit' || SIZE_MODES[p.sizeMode ?? 'same'] ? p.sizeMode ?? 'same' : 'same',
+    fitWidth: clamp(p.fitWidth ?? 0.86, 0.3, 1),
     gap: clamp(p.gap ?? 12, 0, 200),
     maxDpr: clamp(p.maxDpr ?? 2, 0.5, 3),
     shrinkMax: 0.25,
@@ -484,6 +485,7 @@ export function makeParams(p) {
       vignette: 0,
       vignetteSize: 0.3,
       samples: clamp(l.samples ?? 16, 2, 16),
+      aspect: l.aspect ?? null,
     },
 
     background: p.background ?? '#000000',
@@ -514,7 +516,7 @@ function placeholderTexture(index, aspect, color) {
     g.fillText(String(index + 1).padStart(2, '0'), w / 2, h / 2)
   }
   const tex = new THREE.CanvasTexture(canvas)
-  tex.colorSpace = THREE.SRGBColorSpace
+  tex.colorSpace = THREE.NoColorSpace // raw sRGB pixels, never converted
   tex.minFilter = THREE.LinearMipmapLinearFilter
   tex.magFilter = THREE.LinearFilter
   tex.generateMipmaps = true
@@ -531,6 +533,11 @@ export function createEngine(mount, getParams, hooks = {}) {
   let H = Math.max(1, mount.clientHeight)
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' })
+  // Photographs must look exactly like the files. Textures are tagged
+  // NoColorSpace and the output is "linear", so three.js never converts the
+  // sRGB pixels on the way through the render target and lens pass.
+  renderer.outputColorSpace = THREE.LinearSRGBColorSpace
+  renderer.toneMapping = THREE.NoToneMapping
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, pp.maxDpr))
   renderer.setSize(W, H)
 
@@ -581,10 +588,15 @@ export function createEngine(mount, getParams, hooks = {}) {
     return (SIZE_MODES[pp.sizeMode] ?? SIZE_MODES.same)(srcIndex)
   }
   function cardHeight(srcIndex) {
+    if (pp.sizeMode === 'fit') {
+      // shared height, but wide photos shrink so they fit across the screen
+      const aspect = sources[srcIndex]?.aspect || 1
+      return Math.min(panelHeight(), (W * pp.fitWidth) / aspect)
+    }
     return panelHeight() * sizing(srcIndex).h
   }
   function widthAt(srcIndex, h) {
-    if (pp.sizeMode === 'image') return sources[srcIndex].aspect * h
+    if (pp.sizeMode === 'image' || pp.sizeMode === 'fit') return sources[srcIndex].aspect * h
     const rest = cardHeight(srcIndex)
     return pp.cardW * sizing(srcIndex).w * (rest > 0 ? h / rest : 1)
   }
@@ -727,7 +739,9 @@ export function createEngine(mount, getParams, hooks = {}) {
     const L = pp.lens
     const rad = (a) => (a * Math.PI) / 180
     lensU.uCenter.value.set(L.posX, L.posY)
-    lensU.uAspect.value = W / H
+    // The lens is shaped in units of screen height. `aspect` lets every screen
+    // use a phone's proportions, so the lens frames the centre photo the same way.
+    lensU.uAspect.value = L.aspect ? Math.min(L.aspect, W / H) : W / H
     lensU.uTime.value = now * 0.001
     lensU.uRotation.value = rad(L.rotation) + rad(L.spin) * (now * 0.001)
     lensU.uSizeX.value = L.sizeX
@@ -837,7 +851,7 @@ export function createEngine(mount, getParams, hooks = {}) {
           tex.magFilter = THREE.LinearFilter
           tex.generateMipmaps = true
           tex.anisotropy = renderer.capabilities.getMaxAnisotropy()
-          tex.colorSpace = THREE.SRGBColorSpace
+          tex.colorSpace = THREE.NoColorSpace // raw sRGB pixels, never converted
           if (!s.locked && tex.image) s.aspect = tex.image.width / tex.image.height
           s.tex = tex
           owned.push(tex)
@@ -1470,7 +1484,9 @@ export function createEngine(mount, getParams, hooks = {}) {
   }
 
   function draw() {
-    if (pp.lens.enabled) {
+    // With the lens fully faded (a photo in focus) draw the photographs
+    // directly, so nothing — glow, rim shading, dispersion — touches them.
+    if (pp.lens.enabled && focusState.lensFx > 0.002) {
       renderer.setRenderTarget(rt)
       renderer.render(scene, camera)
       renderer.setRenderTarget(null)
