@@ -637,6 +637,22 @@
       "year": 2026
     }
   },
+  "exhibition-cover": {
+    "slug": "exhibition-cover",
+    "source": "exhibition-cover.jpg",
+    "sourceBytes": 426480,
+    "width": 1333,
+    "height": 2000,
+    "widths": [
+      640,
+      960,
+      1280,
+      1333
+    ],
+    "placeholder": "data:image/webp;base64,UklGRrQAAABXRUJQVlA4IKgAAABQBACdASoQABgAPu1iqU2ppaQiMAgBMB2JbACdMoACPcpp5id/4KKQRudgAN2Zz7qQrHnwR+Vs4/BYem9KmmwqqV+27NCMEMh7HF0yuGzHPj98m3A8TBz4JqUNwKZZp1VxyxaveKckvhXiC03q+lu55ip71fe9Jy8XFdqaKVmUzweco/M93wB1WRHsq/DECwgrZQQ+OM0jY+g8FyK/Al4xtn8QiGh+6AA=",
+    "color": "rgb(24 8 8)",
+    "exif": null
+  },
   "img-1370": {
     "slug": "img-1370",
     "source": "IMG_1370.jpg",

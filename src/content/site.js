@@ -31,6 +31,7 @@ export const site = {
     { url: 'https://adobe.ly/3VgRulm', title: 'VT vs VMI', meta: 'Game day', cover: 'dsc03214' },
     { url: 'https://adobe.ly/4iFu82O', title: 'VT vs Maryland', meta: 'Game day', cover: 'dsc04402' },
     { url: 'https://adobe.ly/3UPW6io', title: 'VT vs ODU', meta: 'Game day', cover: 'img-9229' },
+    { url: 'https://adobe.ly/4ykFzRL', title: 'Exhibition', meta: '', cover: 'exhibition-cover' },
   ],
 
   // Where booking requests are delivered. The form posts to FormSubmit

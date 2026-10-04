@@ -1,8 +1,14 @@
-import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { createContext, lazy, Suspense, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Glass from './Glass.jsx'
 import { exposureLine, srcSet } from '../lib/photos.js'
-import { prefersReducedMotion } from '../lib/device.js'
+import { prefersReducedMotion, hasWebGL } from '../lib/device.js'
+
+// The Liquid Glass Carousel (three.js) is the viewer; it loads only when a
+// photo is first opened. The simple viewer below stays as the fallback for
+// reduced motion or no WebGL.
+const CarouselViewer = lazy(() => import('./carousel/CarouselViewer.jsx'))
+const useCarousel = () => hasWebGL() && !prefersReducedMotion()
 
 const LightboxContext = createContext(() => {})
 export const useLightbox = () => useContext(LightboxContext)
@@ -260,5 +266,15 @@ export function LightboxProvider({ children }) {
 }
 
 function ViewerPortal(props) {
-  return createPortal(<Viewer {...props} />, document.body)
+  const carousel = useMemo(useCarousel, [])
+  return createPortal(
+    carousel ? (
+      <Suspense fallback={<div className="carousel carousel--loading" aria-hidden="true" />}>
+        <CarouselViewer state={props.state} onClose={props.onClose} />
+      </Suspense>
+    ) : (
+      <Viewer {...props} />
+    ),
+    document.body,
+  )
 }
