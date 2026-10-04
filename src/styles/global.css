@@ -2127,6 +2127,18 @@ a.contact__value:hover {
   padding: 6px 6px 6px 22px;
   max-width: calc(100% - 24px);
 }
+.carousel__close-wrap,
+.carousel__bar {
+  transition: opacity 400ms ease;
+}
+.carousel.is-immersive .carousel__close-wrap,
+.carousel.is-immersive .carousel__bar {
+  opacity: 0;
+  pointer-events: none;
+}
+.carousel.is-immersive {
+  cursor: none;
+}
 .carousel__hint {
   color: var(--faint);
 }
